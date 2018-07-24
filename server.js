@@ -7,6 +7,10 @@ const
 
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+app.get('/ping', (req, res) => {
+  res.status(200).json({tudo: 'certo :)'});
+})
+
 app.post('/webhook', (req, res) => {
 
   let body = req.body;
