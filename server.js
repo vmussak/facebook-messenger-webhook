@@ -12,7 +12,7 @@ app.get('/ping', (req, res) => {
   res.status(200).json({tudo: 'certo :)'});
 })
 
-app.get('politica-privacidade', (req, res) => {
+app.get('/politica-privacidade', (req, res) => {
   let html = fs.readFileSync('./politica-privacidade.html');
 
   res.writeHeader(200, {"Content-Type": "text/html"});  
