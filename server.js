@@ -6,6 +6,9 @@ const
   fs = require('fs'),
   app = express().use(bodyParser.json());
 
+  const ACCESS_TOKEN = 'EAAKfWoWMKA0BAEW6PmXIWPdVBZBLw6ppWj4pKhvJYJR7Atcmh7X1AbZCbZCYOUZCZAIrB78JgslI5cnwMBLMQAofVUv9Om2ZALT91MXk459TfeDY5dSYlQOBz3bqqygYMlOQ014dRSR7DUl2vupMkZBidDQOHZAB4IoyMGS2u1HsvRqihi1a0VlY';
+
+
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 app.get('/ping', (req, res) => {
@@ -47,7 +50,7 @@ app.post('/webhook', (req, res) => {
 
 app.get('/webhook', (req, res) => {
 
-  let VERIFY_TOKEN = process.env.VERIFY_TOKEN || "ARVOROS_TOKEN";
+  let VERIFY_TOKEN = process.env.VERIFY_TOKEN || "ARVOROS_BOT_TOKEN";
 
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
@@ -95,7 +98,7 @@ function callSendAPI(sender_psid, response) {
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "qs": { "access_token": ACCESS_TOKEN },
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
