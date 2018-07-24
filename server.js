@@ -6,21 +6,21 @@ const
   fs = require('fs'),
   app = express().use(bodyParser.json());
 
-  const ACCESS_TOKEN = 'EAAKfWoWMKA0BAEW6PmXIWPdVBZBLw6ppWj4pKhvJYJR7Atcmh7X1AbZCbZCYOUZCZAIrB78JgslI5cnwMBLMQAofVUv9Om2ZALT91MXk459TfeDY5dSYlQOBz3bqqygYMlOQ014dRSR7DUl2vupMkZBidDQOHZAB4IoyMGS2u1HsvRqihi1a0VlY';
+const ACCESS_TOKEN = 'EAAKfWoWMKA0BAEW6PmXIWPdVBZBLw6ppWj4pKhvJYJR7Atcmh7X1AbZCbZCYOUZCZAIrB78JgslI5cnwMBLMQAofVUv9Om2ZALT91MXk459TfeDY5dSYlQOBz3bqqygYMlOQ014dRSR7DUl2vupMkZBidDQOHZAB4IoyMGS2u1HsvRqihi1a0VlY';
 
 
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 app.get('/ping', (req, res) => {
-  res.status(200).json({tudo: 'certo :)'});
+  res.status(200).json({ tudo: 'certo :)' });
 })
 
 app.get('/politica-privacidade', (req, res) => {
   let html = fs.readFileSync('./politica-privacidade.html');
 
-  res.writeHeader(200, {"Content-Type": "text/html"});  
-  res.write(html);  
-  res.end();  
+  res.writeHeader(200, { "Content-Type": "text/html" });
+  res.write(html);
+  res.end();
 })
 
 app.post('/webhook', (req, res) => {
@@ -32,14 +32,14 @@ app.post('/webhook', (req, res) => {
     body.entry.forEach(function (entry) {
       let webhook_event = entry.messaging[0];
       console.log(webhook_event);
+
+      let sender_psid = webhook_event.sender.id;
+      console.log('Sender PSID: ' + sender_psid);
+
+      if (webhook_event.message) {
+        handleMessage(sender_psid, webhook_event.message);
+      }
     });
-
-    let sender_psid = webhook_event.sender.id;
-    console.log('Sender PSID: ' + sender_psid);
-
-    if (webhook_event.message) {
-      handleMessage(sender_psid, webhook_event.message);
-    } 
 
     res.status(200).send('EVENT_RECEIVED');
   } else {
@@ -74,16 +74,16 @@ function handleMessage(sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
-  if (received_message.text) {    
+  if (received_message.text) {
 
     // Create the payload for a basic text message
     response = {
       "text": `Você disse: "${received_message.text}". ARVOROSSSS`
     }
-  }  
-  
+  }
+
   // Sends the response message
-  callSendAPI(sender_psid, response);    
+  callSendAPI(sender_psid, response);
 }
 
 function callSendAPI(sender_psid, response) {
@@ -107,5 +107,5 @@ function callSendAPI(sender_psid, response) {
     } else {
       console.error("Unable to send message:" + err);
     }
-  }); 
+  });
 }
