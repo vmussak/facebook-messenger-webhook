@@ -3,12 +3,21 @@
 const
   express = require('express'),
   bodyParser = require('body-parser'),
+  fs = require('fs'),
   app = express().use(bodyParser.json());
 
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 app.get('/ping', (req, res) => {
   res.status(200).json({tudo: 'certo :)'});
+})
+
+app.get('politica-privacidade', (req, res) => {
+  let html = fs.readFileSync('./politica-privacidade.html');
+
+  res.writeHeader(200, {"Content-Type": "text/html"});  
+  res.write(html);  
+  res.end();  
 })
 
 app.post('/webhook', (req, res) => {
